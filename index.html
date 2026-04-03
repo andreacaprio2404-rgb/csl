@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calm Scale Lab — The Execution Container for Coaches Ready to Scale</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+
+/* ════════════════════════════════════
+   RESET + TOKENS — new palette
+════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  /* Backgrounds — lighter charcoal for better readability */
+  --ink:        #22222a;
+  --ink-mid:    #28282f;
+  --ink-lift:   #2f2f38;
+  --ink-card:   #353540;
+
+  /* Brand colors */
+  --rose:       #600040;
+  --rose-lo:    rgba(96,0,64,0.15);
+  --rose-glow:  rgba(96,0,64,0.4);
+
+  --teal:       #09c2bf;
+  --teal-alt:   #079895;
+  --teal-lo:    rgba(9,194,191,0.09);
+  --teal-glow:  rgba(9,194,191,0.32);
+
+  --gold:       #e8c96e;
+  --gold-lo:    rgba(232,201,110,0.1);
+
+  /* Text — proper white/near-white for readability */
+  --chalk:      #f5f2fa;
+  --chalk-mid:  rgba(238,234,248,0.82);
+  --chalk-dim:  rgba(215,210,232,0.52);
+  --rule:       rgba(255,255,255,0.08);
+
+  /* Fonts */
+  --f-display:  'Cormorant Garamond', Georgia, serif;
+  --f-body:     'DM Sans', system-ui, sans-serif;
+  --r:          10px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--f-body);
+  background: var(--ink);
+  color: var(--chalk);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* ── Layout ── */
+.page      { max-width: 1100px; margin: 0 auto; padding: 0 56px; }
+.page-wide { max-width: 1280px; margin: 0 auto; padding: 0 56px; }
+.sec       { padding: 108px 0; }
+.sec-md    { padding: 80px 0; }
+.sec-sm    { padding: 56px 0; }
+
+/* ── Type scale ── */
+.display { font-family: var(--f-display); line-height: 1.06; letter-spacing: -0.02em; color: var(--chalk); }
+.d1 { font-size: clamp(52px, 7vw, 96px); font-weight: 700; }
+.d2 { font-size: clamp(34px, 4vw, 56px); font-weight: 700; }
+.d3 { font-size: clamp(24px, 2.8vw, 38px); font-weight: 600; }
+.italic { font-style: italic; }
+.accent-rose  { color: var(--rose); }
+.accent-teal  { color: var(--teal); }
+.accent-gold  { color: var(--gold); }
+.struck { color: rgba(248,245,252,0.22); text-decoration: line-through; text-decoration-color: rgba(248,245,252,0.16); text-decoration-thickness: 2px; }
+
+.body { font-size: 17px; line-height: 1.86; color: var(--chalk-mid); font-weight: 400; }
+.body strong { color: var(--chalk); font-weight: 600; }
+.body + .body { margin-top: 18px; }
+.small { font-size: 14px; line-height: 1.74; color: var(--chalk-dim); font-weight: 400; }
+
+/* ── Labels ── */
+.label { font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; font-weight: 600; font-family: var(--f-body); }
+.label-teal { color: var(--teal); }
+.label-rose { color: var(--rose); filter: brightness(1.6); }
+.label-gold { color: var(--gold); }
+.label-dim  { color: var(--chalk-dim); }
+
+.section-eyebrow { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.section-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(9,194,191,0.28) 0%, transparent 80%); }
+
+/* ── Dividers ── */
+.rule      { height: 1px; background: var(--rule); }
+.rule-fade { height: 1px; background: linear-gradient(90deg, transparent, var(--rule) 30%, var(--rule) 70%, transparent); }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--f-body); font-weight: 600; font-size: 14px;
+  letter-spacing: 0.02em; border-radius: 6px; cursor: pointer;
+  text-decoration: none; border: none; transition: all 0.18s;
+  padding: 15px 30px;
+}
+.btn-primary { background: var(--teal); color: #111118; box-shadow: 0 4px 28px var(--teal-glow); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px var(--teal-glow); }
+.btn-ghost { background: transparent; color: var(--chalk-mid); border: 1px solid rgba(255,255,255,0.14); }
+.btn-ghost:hover { border-color: rgba(9,194,191,0.3); color: var(--teal); }
+.btn-gold { background: var(--gold); color: #111118; box-shadow: 0 4px 24px rgba(232,201,110,0.28); }
+.btn-gold:hover { transform: translateY(-2px); }
+.btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+.btn-lg { padding: 18px 38px; font-size: 15px; }
+.cta-note { font-size: 11px; color: var(--chalk-dim); margin-top: 13px; letter-spacing: 0.04em; }
+.cta-note strong { color: var(--chalk-mid); font-weight: 500; }
+
+/* ── Cards ── */
+.card { background: var(--ink-card); border: 1px solid var(--rule); border-radius: var(--r); }
+.card-teal { border-color: rgba(9,194,191,0.18); }
+.card-rose { border-color: rgba(96,0,64,0.3); }
+.card-gold { border-color: rgba(232,201,110,0.2); }
+
+/* ── Chips ── */
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; }
+.chip-teal   { background: var(--teal-lo);   border: 1px solid rgba(9,194,191,0.22);  color: var(--teal); }
+.chip-rose   { background: var(--rose-lo);   border: 1px solid rgba(96,0,64,0.35);    color: #d06090; }
+.chip-gold   { background: var(--gold-lo);   border: 1px solid rgba(232,201,110,0.28); color: var(--gold); }
+.chip-dim    { background: rgba(255,255,255,0.04); border: 1px solid var(--rule); color: var(--chalk-dim); }
+
+/* ════════════════════════════════════
+   HERO
+════════════════════════════════════ */
+.hero { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+
+.hero-atm {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 90% at -8% 45%, rgba(96,0,64,0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 70% at 108% 12%, rgba(96,0,64,0.2) 0%, transparent 50%),
+    radial-gradient(ellipse 45% 55% at 58% 108%, rgba(9,194,191,0.1) 0%, transparent 55%),
+    linear-gradient(160deg, #141419 0%, #1c1c24 50%, #131318 100%);
+}
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.03;
+  background-image: linear-gradient(rgba(9,194,191,1) 1px, transparent 1px), linear-gradient(90deg, rgba(9,194,191,1) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 0%, transparent 80%);
+}
+.hero-noise {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+.hero-geo {
+  position: absolute; right: -40px; top: 50%; transform: translateY(-50%);
+  width: 560px; height: 560px; pointer-events: none;
+}
+.hero-geo .g-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(96,0,64,0.14); }
+.g-ring:nth-child(1) { inset: 0; }
+.g-ring:nth-child(2) { inset: 70px; border-color: rgba(96,0,64,0.09); }
+.g-ring:nth-child(3) { inset: 140px; border-color: rgba(9,194,191,0.09); }
+.g-ring:nth-child(4) { inset: 210px; border-color: rgba(96,0,64,0.13); }
+.g-glow { position: absolute; inset: 100px; border-radius: 50%; background: radial-gradient(circle, rgba(96,0,64,0.22) 0%, transparent 65%); }
+
+.hero-body { position: relative; z-index: 2; padding: 110px 0 110px 72px; max-width: 720px; }
+
+.hero-kicker {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 7px 16px 7px 11px;
+  border: 1px solid rgba(9,194,191,0.22); border-radius: 4px;
+  background: rgba(9,194,191,0.06); margin-bottom: 34px;
+}
+.hero-kicker .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal); box-shadow: 0 0 12px var(--teal-glow);
+  animation: breathe 2.6s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%,100% { box-shadow: 0 0 6px rgba(9,194,191,0.5); }
+  50%      { box-shadow: 0 0 18px rgba(9,194,191,0.9); }
+}
+.hero-kicker span { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); font-weight: 500; }
+
+.hero h1 { margin-bottom: 4px; }
+.h1-pre { display: block; font-size: clamp(16px, 2vw, 22px); font-style: normal; font-weight: 400; color: var(--chalk-dim); margin-bottom: 4px; }
+
+.hero-sub { font-size: 17px; line-height: 1.8; color: var(--chalk-mid); font-weight: 300; max-width: 500px; margin: 30px 0 0; }
+.hero-sub strong { color: var(--chalk); font-weight: 500; }
+
+.hero-actions { display: flex; align-items: center; gap: 14px; margin-top: 44px; flex-wrap: wrap; }
+
+.hero-proof-strip {
+  display: flex; align-items: center; gap: 24px; margin-top: 48px;
+  padding-top: 28px; border-top: 1px solid var(--rule); flex-wrap: wrap;
+}
+.hps-item { display: flex; align-items: center; gap: 8px; }
+.hps-icon { width: 14px; height: 14px; color: var(--teal); flex-shrink: 0; }
+.hps-item span { font-size: 12px; color: var(--chalk-dim); letter-spacing: 0.03em; }
+.hps-item strong { color: var(--chalk-mid); font-weight: 500; }
+.hps-sep { width: 1px; height: 18px; background: var(--rule); }
+
+/* ════════════════════════════════════
+   TICKER
+════════════════════════════════════ */
+.ticker-wrap { background: var(--ink-mid); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow: hidden; padding: 14px 0; }
+.ticker-inner { display: flex; gap: 0; white-space: nowrap; animation: slide 36s linear infinite; }
+@keyframes slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.ti { display: inline-flex; align-items: center; gap: 10px; padding: 0 40px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--chalk-dim); flex-shrink: 0; }
+.ti strong { color: var(--teal); font-weight: 600; }
+.ti-dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(96,0,64,0.5); }
+
+/* ════════════════════════════════════
+   PAIN SECTION
+════════════════════════════════════ */
+.pain-sec { background: var(--ink-mid); }
+.pain-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+.pain-left .pull-q {
+  font-family: var(--f-display); font-style: italic;
+  font-size: clamp(18px, 1.9vw, 23px); line-height: 1.58;
+  color: rgba(248,245,252,0.62); padding-left: 22px;
+  border-left: 2px solid #d06090; margin: 26px 0;
+}
+.mirror-stack { display: flex; flex-direction: column; padding-top: 8px; }
+.mirror-row { display: flex; align-items: flex-start; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--rule); }
+.mirror-row:last-child { border-bottom: none; }
+.mirror-row:first-child { padding-top: 0; }
+.mr-bullet { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: #d06090; opacity: 0.5; margin-top: 8px; }
+.mr-head { font-size: 16px; font-weight: 600; color: var(--chalk); display: block; margin-bottom: 4px; }
+.mr-body { font-size: 14px; color: var(--chalk-mid); line-height: 1.66; }
+
+/* ════════════════════════════════════
+   REFRAME BAND
+════════════════════════════════════ */
+.reframe {
+  padding: 96px 0; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #3a0028 0%, #600040 42%, #2a001e 100%);
+}
+.reframe::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 110% at 50% 50%, rgba(208,96,144,0.18), transparent 65%); }
+.reframe-inner { position: relative; z-index: 1; text-align: center; }
+.rf-stack { display: flex; flex-direction: column; gap: 2px; margin-bottom: 20px; }
+.rf-line { font-family: var(--f-display); font-size: clamp(20px, 2.6vw, 36px); font-weight: 600; color: rgba(220,210,235,0.35); line-height: 1.38; }
+.rf-line.white { color: var(--chalk); font-size: clamp(24px, 3vw, 42px); margin-top: 10px; }
+.rf-line.gold  { color: var(--gold); font-style: italic; font-size: clamp(26px, 3.4vw, 48px); }
+.rf-foot { font-size: 12px; color: rgba(220,210,235,0.38); letter-spacing: 0.16em; text-transform: uppercase; margin-top: 8px; }
+
+/* ════════════════════════════════════
+   WHAT IT IS + WHO
+════════════════════════════════════ */
+.what-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+.core-quote-block {
+  position: relative; padding: 28px 30px;
+  border: 1px solid rgba(96,0,64,0.3); border-radius: var(--r);
+  background: linear-gradient(135deg, rgba(96,0,64,0.1), rgba(9,194,191,0.04));
+  margin: 26px 0 30px; overflow: hidden;
+}
+.core-quote-block::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--rose), #d06090, var(--teal)); }
+.cqb-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #d06090; font-weight: 600; margin-bottom: 10px; }
+.cqb-quote { font-family: var(--f-display); font-style: italic; font-size: clamp(17px, 1.9vw, 21px); line-height: 1.52; color: var(--chalk); font-weight: 600; }
+
+.fit-cards { display: flex; flex-direction: column; gap: 14px; }
+.fit-card { border-radius: var(--r); padding: 24px 26px; }
+.fit-card.yes { background: rgba(9,194,191,0.05); border: 1px solid rgba(9,194,191,0.16); }
+.fit-card.no  { background: rgba(96,0,64,0.07);  border: 1px solid rgba(96,0,64,0.22); }
+.fit-head { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.fit-head-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.fit-card.yes .fit-head-icon { background: rgba(9,194,191,0.15); color: var(--teal); }
+.fit-card.no  .fit-head-icon { background: rgba(96,0,64,0.2);   color: #d06090; }
+.fit-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.fit-list li { font-size: 15px; color: var(--chalk-mid); display: flex; gap: 10px; line-height: 1.56; }
+.fit-card.yes .fit-list li::before { content: '✓'; color: var(--teal); font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+.fit-card.no  .fit-list li::before { content: '✕'; color: #d06090; font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+.fit-note { font-size: 12px; color: var(--chalk-dim); margin-top: 12px; font-style: italic; line-height: 1.6; }
+
+/* ════════════════════════════════════
+   SPRINT
+════════════════════════════════════ */
+.sprint-sec { background: var(--ink-mid); }
+.sprint-top { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-bottom: 52px; align-items: start; }
+.sprint-intro .phase-chip-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+
+.timeline { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-bottom: 52px; }
+.tl-card { background: var(--ink-card); border: 1px solid var(--rule); border-radius: var(--r); padding: 28px; position: relative; overflow: hidden; }
+.tl-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--rose), var(--teal)); }
+.tl-num { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); font-weight: 600; margin-bottom: 10px; }
+.tl-title { font-family: var(--f-display); font-size: 20px; font-weight: 700; color: var(--chalk); margin-bottom: 16px; }
+.tl-items { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+.tl-item { font-size: 14px; color: var(--chalk-mid); display: flex; gap: 8px; line-height: 1.5; }
+.tl-item::before { content: '→'; color: var(--chalk-dim); flex-shrink: 0; }
+.tl-outcome { font-size: 12px; color: var(--teal); border-top: 1px solid var(--rule); padding-top: 14px; line-height: 1.55; }
+
+.boost-headline { font-family: var(--f-display); font-size: 22px; font-weight: 700; color: var(--chalk); margin-bottom: 22px; }
+.boost-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 40px; }
+.boost-card { background: var(--ink-card); border: 1px solid var(--rule); border-radius: var(--r); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; }
+.bc-top { display: flex; align-items: center; gap: 10px; }
+.bc-icon { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; background: var(--rose-lo); border: 1px solid rgba(96,0,64,0.25); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.bc-title { font-size: 14px; font-weight: 600; color: var(--chalk); }
+.bc-body  { font-size: 13px; color: var(--chalk-mid); line-height: 1.62; }
+.bc-badge { align-self: flex-start; }
+
+.funnel-block { display: flex; align-items: center; gap: 16px; justify-content: center; margin: 28px 0 16px; flex-wrap: wrap; }
+.funnel-step { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.fs-box { border-radius: 10px; padding: 20px 22px; text-align: center; border: 1px solid; min-width: 160px; }
+.fs-icon { font-size: 22px; margin-bottom: 6px; }
+.fs-label { font-size: 13px; font-weight: 600; color: var(--chalk); }
+.fs-sub { font-size: 11px; color: var(--chalk-dim); margin-top: 3px; }
+.funnel-label { font-size: 11px; color: var(--chalk-dim); letter-spacing: 0.04em; }
+.funnel-arrow { font-size: 20px; color: var(--chalk-dim); }
+
+.rules-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 44px; }
+.rules-label { grid-column: 1/-1; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--chalk-dim); font-weight: 600; margin-bottom: 4px; }
+.rule-item { font-size: 13px; color: var(--chalk-mid); padding: 13px 16px; background: var(--ink-card); border: 1px solid var(--rule); border-radius: 6px; display: flex; gap: 8px; }
+.rule-item::before { content: '—'; color: var(--teal); flex-shrink: 0; }
+
+/* ════════════════════════════════════
+   SCALE LAB
+════════════════════════════════════ */
+.scale-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+.pillar-pair { display: grid; grid-template-columns: 1fr; gap: 14px; }
+.pillar { padding: 26px 28px; border-radius: var(--r); border: 1px solid var(--rule); background: var(--ink-card); position: relative; overflow: hidden; }
+.pillar::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; }
+.pillar.p1::before { background: linear-gradient(180deg, var(--rose), #d06090); }
+.pillar.p2::before { background: linear-gradient(180deg, var(--teal), rgba(9,194,191,0.35)); }
+.pillar-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+.pillar.p1 .pillar-label { color: #d06090; }
+.pillar.p2 .pillar-label { color: var(--teal); }
+.pillar-title { font-family: var(--f-display); font-size: 21px; font-weight: 700; color: var(--chalk); margin-bottom: 12px; }
+.pillar-items { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.pillar-items li { font-size: 14px; color: var(--chalk-mid); display: flex; gap: 9px; line-height: 1.52; }
+.pillar-items li::before { content: '→'; color: var(--chalk-dim); flex-shrink: 0; }
+.scale-manifesto { padding: 28px 30px; border-radius: var(--r); background: rgba(9,194,191,0.05); border: 1px solid rgba(9,194,191,0.14); margin-top: 14px; }
+.sm-headline { font-family: var(--f-display); font-size: 19px; font-weight: 700; font-style: italic; color: var(--teal); margin-bottom: 12px; }
+.sm-body { font-size: 14px; line-height: 1.8; color: var(--chalk-mid); font-weight: 300; }
+.sm-body strong { color: var(--chalk); font-weight: 500; }
+
+/* ════════════════════════════════════
+   DELIVERY
+════════════════════════════════════ */
+.delivery-sec { background: var(--ink-mid); }
+.delivery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.d-card { padding: 28px; border-radius: var(--r); background: var(--ink-card); border: 1px solid var(--rule); }
+.d-icon-wrap { width: 42px; height: 42px; border-radius: 10px; margin-bottom: 16px; background: var(--rose-lo); border: 1px solid rgba(96,0,64,0.25); display: flex; align-items: center; justify-content: center; }
+.d-icon-wrap svg { width: 20px; height: 20px; color: #d06090; }
+.d-title  { font-size: 16px; font-weight: 600; color: var(--chalk); margin-bottom: 9px; }
+.d-body   { font-size: 14px; line-height: 1.74; color: var(--chalk-mid); font-weight: 400; margin-bottom: 12px; }
+.d-detail { font-size: 12px; color: var(--teal); letter-spacing: 0.04em; }
+
+/* ════════════════════════════════════
+   RETREAT
+════════════════════════════════════ */
+.retreat-sec { background: var(--ink); }
+.retreat-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.retreat-visual { position: relative; border-radius: 14px; overflow: hidden; min-height: 440px; border: 1px solid rgba(96,0,64,0.28); }
+.rv-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #280020 0%, #480030 48%, #0e1520 100%); }
+.rv-grid { position: absolute; inset: 0; opacity: 0.05; background-image: linear-gradient(rgba(208,96,144,1) 1px, transparent 1px), linear-gradient(90deg, rgba(208,96,144,1) 1px, transparent 1px); background-size: 40px 40px; }
+.rv-content { position: relative; z-index: 2; padding: 44px; display: flex; flex-direction: column; height: 100%; min-height: 440px; }
+.rv-title { font-family: var(--f-display); font-size: 32px; font-weight: 700; font-style: italic; color: var(--chalk); margin-bottom: 14px; line-height: 1.2; }
+.rv-promise { font-size: 14px; color: rgba(220,210,238,0.62); line-height: 1.74; font-weight: 300; flex: 1; margin-bottom: 22px; }
+.rv-promise em { color: var(--gold); font-style: italic; font-family: var(--f-display); font-size: 15px; }
+.rv-stats { display: flex; gap: 22px; flex-wrap: wrap; }
+.rv-stat strong { display: block; font-family: var(--f-display); font-size: 22px; font-weight: 700; color: var(--gold); }
+.rv-stat span   { font-size: 11px; color: var(--chalk-dim); letter-spacing: 0.06em; }
+.retreat-copy .outcomes { display: flex; flex-direction: column; gap: 14px; margin: 26px 0; }
+.outcome-item { display: flex; align-items: flex-start; gap: 14px; }
+.oi-num { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--gold-lo); border: 1px solid rgba(232,201,110,0.26); display: flex; align-items: center; justify-content: center; font-family: var(--f-display); font-size: 13px; font-weight: 700; color: var(--gold); }
+.oi-text { font-size: 14px; color: var(--chalk-mid); line-height: 1.62; font-weight: 300; }
+.oi-text strong { color: var(--chalk); font-weight: 500; }
+
+/* ════════════════════════════════════
+   TESTIMONIALS
+════════════════════════════════════ */
+.testi-sec { background: var(--ink-mid); }
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 48px; }
+.testi-card { padding: 28px; border-radius: var(--r); background: var(--ink-card); border: 1px solid var(--rule); display: flex; flex-direction: column; gap: 18px; position: relative; overflow: hidden; }
+.testi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--rose), #d06090, transparent); }
+.tc-result { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); font-weight: 600; }
+.tc-quote  { font-family: var(--f-display); font-style: italic; font-size: 17px; line-height: 1.72; color: var(--chalk-mid); flex: 1; }
+.tc-author { display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--rule); padding-top: 14px; }
+.tc-av { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(135deg, var(--rose), var(--teal)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: white; }
+.tc-name { font-size: 13px; font-weight: 500; color: var(--chalk); }
+.tc-role { font-size: 11px; color: var(--chalk-dim); margin-top: 1px; }
+
+/* ════════════════════════════════════
+   ABOUT
+════════════════════════════════════ */
+.about-layout { display: grid; grid-template-columns: 340px 1fr; gap: 80px; align-items: center; }
+.about-img-col { position: relative; }
+.about-frame { width: 100%; aspect-ratio: 4/5; border-radius: 14px; overflow: hidden; background: linear-gradient(155deg, rgba(96,0,64,0.4), rgba(9,194,191,0.12)); border: 1px solid rgba(96,0,64,0.25); }
+.about-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+.about-badge { position: absolute; bottom: -18px; right: -18px; background: var(--ink-card); border: 1px solid rgba(232,201,110,0.28); border-radius: 12px; padding: 14px 18px; }
+.ab-num   { font-family: var(--f-display); font-size: 30px; font-weight: 700; color: var(--gold); line-height: 1; display: block; }
+.ab-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--chalk-dim); display: block; margin-top: 3px; }
+.about-copy .bio-ph { border: 1px dashed rgba(96,0,64,0.3); border-radius: 8px; padding: 18px 20px; background: rgba(96,0,64,0.05); margin-bottom: 20px; }
+.bio-ph .ph-lbl { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #d06090; margin-bottom: 7px; display: block; font-weight: 600; }
+.bio-ph p { font-size: 13px; color: var(--chalk-dim); line-height: 1.65; }
+
+/* ════════════════════════════════════
+   PRICING
+════════════════════════════════════ */
+.pricing-sec { background: var(--ink-mid); }
+.pricing-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 48px; align-items: start; }
+
+.price-card { border-radius: var(--r); padding: 32px; background: var(--ink-card); border: 1px solid var(--rule); position: relative; overflow: hidden; }
+
+.price-card.pif-card { border-color: rgba(232,201,110,0.3); background: linear-gradient(160deg, rgba(232,201,110,0.07) 0%, rgba(96,0,64,0.05) 100%); }
+.price-card.pif-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--gold), #d06090); }
+
+.price-card.vip-card { border-color: rgba(9,194,191,0.18); background: linear-gradient(160deg, rgba(9,194,191,0.06) 0%, rgba(96,0,64,0.04) 100%); }
+.price-card.vip-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--teal), var(--teal-alt), #d06090); }
+
+.price-card.beta-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, rgba(96,0,64,0.5), rgba(208,96,144,0.4)); }
+
+.pc-name { font-family: var(--f-display); font-size: 22px; font-weight: 700; color: var(--chalk); margin: 12px 0 6px; line-height: 1.2; }
+.pc-tagline { font-size: 14px; color: var(--chalk-mid); line-height: 1.6; margin-bottom: 22px; }
+.pc-price { font-family: var(--f-display); font-size: 48px; font-weight: 700; color: var(--chalk); letter-spacing: -0.03em; line-height: 1; margin-bottom: 4px; }
+.pc-price-was { font-family: var(--f-display); font-size: 24px; font-weight: 600; color: var(--chalk-dim); text-decoration: line-through; margin-bottom: 4px; line-height: 1; }
+.pc-period { font-size: 14px; color: var(--chalk-mid); margin-bottom: 5px; }
+.pc-note   { font-size: 13px; color: var(--teal); margin-bottom: 22px; line-height: 1.5; }
+.pc-note.gold-note { color: var(--gold); }
+.pc-rule   { height: 1px; background: var(--rule); margin: 20px 0; }
+.pc-includes { display: flex; flex-direction: column; gap: 9px; margin-bottom: 24px; }
+.pci { font-size: 14px; color: var(--chalk-mid); display: flex; gap: 9px; align-items: flex-start; line-height: 1.52; }
+.pci::before { content: '✓'; color: var(--teal); font-size: 10px; flex-shrink: 0; margin-top: 2px; }
+.pci.gold-pci::before { color: var(--gold); }
+.pc-btn { display: block; width: 100%; text-align: center; justify-content: center; }
+
+/* VIP wire block */
+.wire-block { background: rgba(9,194,191,0.07); border: 1px solid rgba(9,194,191,0.18); border-radius: 8px; padding: 13px 15px; margin-bottom: 18px; }
+.wire-block-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); font-weight: 600; margin-bottom: 5px; }
+.wire-block-desc { font-size: 12px; color: var(--chalk-mid); line-height: 1.62; font-weight: 300; }
+.wire-block-desc strong { color: var(--chalk); font-weight: 500; }
+
+.pricing-note { text-align: center; margin-top: 28px; font-size: 13px; color: var(--chalk-dim); line-height: 1.78; }
+.pricing-note strong { color: var(--chalk-mid); }
+.pricing-note a { color: var(--teal); text-decoration: none; }
+
+/* ════════════════════════════════════
+   GUARANTEE
+════════════════════════════════════ */
+.guarantee-sec { background: var(--ink); border-top: 1px solid var(--rule); }
+.guarantee-wrap { max-width: 840px; margin: 0 auto; text-align: center; }
+.guarantee-icon-wrap { width: 68px; height: 68px; border-radius: 50%; background: rgba(9,194,191,0.07); border: 1px solid rgba(9,194,191,0.2); display: flex; align-items: center; justify-content: center; margin: 0 auto 26px; box-shadow: 0 0 36px rgba(9,194,191,0.1); }
+.guarantee-icon-wrap svg { width: 28px; height: 28px; }
+.guarantee-headline { font-family: var(--f-display); font-size: clamp(26px, 3.2vw, 42px); font-weight: 700; line-height: 1.12; letter-spacing: -0.02em; color: var(--chalk); margin-bottom: 14px; }
+.guarantee-headline em { font-style: italic; color: var(--teal); }
+.guarantee-intro { font-size: 15px; color: var(--chalk-mid); font-weight: 300; line-height: 1.8; max-width: 620px; margin: 0 auto 40px; }
+.guarantee-intro strong { color: var(--chalk); font-weight: 500; }
+.guarantee-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; text-align: left; }
+.guarantee-card { background: var(--ink-card); border: 1px solid var(--rule); border-radius: var(--r); padding: 26px 28px; position: relative; overflow: hidden; }
+.guarantee-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; }
+.guarantee-card.card-teal::before { background: var(--teal); }
+.guarantee-card.card-rose::before { background: #d06090; }
+.gc-label { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600; margin-bottom: 10px; }
+.card-teal .gc-label { color: var(--teal); }
+.card-rose .gc-label { color: #d06090; }
+.gc-condition { font-size: 14px; font-weight: 600; color: var(--chalk); margin-bottom: 9px; line-height: 1.4; }
+.gc-outcome { font-size: 14px; color: var(--chalk-mid); line-height: 1.72; font-weight: 400; }
+.gc-outcome strong { color: var(--chalk); font-weight: 500; }
+.guarantee-fine { background: var(--ink-lift); border: 1px solid var(--rule); border-radius: var(--r); padding: 18px 22px; text-align: left; }
+.guarantee-fine p { font-size: 12px; color: var(--chalk-dim); line-height: 1.74; font-weight: 300; }
+.guarantee-fine p + p { margin-top: 7px; }
+.guarantee-fine strong { color: var(--chalk-mid); font-weight: 500; }
+
+/* ════════════════════════════════════
+   FAQ
+════════════════════════════════════ */
+.faq-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 48px; }
+.faq-item { padding: 22px 24px; border-radius: var(--r); background: var(--ink-card); border: 1px solid var(--rule); }
+.fq { font-size: 15px; font-weight: 600; color: var(--chalk); margin-bottom: 9px; line-height: 1.4; }
+.fa { font-size: 14px; color: var(--chalk-mid); line-height: 1.76; font-weight: 400; }
+.fa strong { color: var(--chalk); font-weight: 500; }
+.fa a { color: var(--teal); text-decoration: none; }
+
+/* ════════════════════════════════════
+   FINAL CTA
+════════════════════════════════════ */
+.final { padding: 130px 0; position: relative; overflow: hidden; text-align: center; background: var(--ink); }
+.final-atm {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 75% 95% at 50% 50%, rgba(96,0,64,0.45) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 45% at 10% 90%, rgba(9,194,191,0.05) 0%, transparent 55%),
+    linear-gradient(180deg, #1a1a1f 0%, #200018 55%, #1a1a1f 100%);
+}
+.final-grid-overlay { position: absolute; inset: 0; opacity: 0.03; background-image: linear-gradient(rgba(208,96,144,1) 1px, transparent 1px), linear-gradient(90deg, rgba(208,96,144,1) 1px, transparent 1px); background-size: 80px 80px; mask-image: radial-gradient(ellipse 80% 100% at 50% 50%, black 0%, transparent 75%); }
+.final-inner { position: relative; z-index: 2; max-width: 620px; margin: 0 auto; padding: 0 36px; }
+.final-kicker { display: inline-flex; align-items: center; gap: 9px; margin-bottom: 26px; padding: 7px 16px 7px 11px; border: 1px solid rgba(9,194,191,0.22); border-radius: 4px; background: rgba(9,194,191,0.06); }
+.final-kicker .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 10px var(--teal-glow); animation: breathe 2.6s ease-in-out infinite; }
+.final-kicker span { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); font-weight: 500; }
+.final-h2 { margin-bottom: 20px; }
+.final-sub { font-size: 17px; line-height: 1.8; color: var(--chalk-mid); font-weight: 300; margin-bottom: 44px; }
+.final-sub strong { color: var(--chalk); }
+.final-actions { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.final-sign { margin-top: 32px; font-family: var(--f-display); font-style: italic; font-size: 15px; color: var(--chalk-dim); }
+
+/* ════════════════════════════════════
+   FOOTER
+════════════════════════════════════ */
+footer { background: #111116; border-top: 1px solid rgba(255,255,255,0.05); padding: 36px 0; text-align: center; }
+footer p { font-size: 12px; color: var(--chalk-dim); line-height: 1.8; max-width: 700px; margin: 0 auto 5px; }
+footer a { color: rgba(9,194,191,0.5); text-decoration: none; }
+
+/* ════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════ */
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.hero-kicker  { animation: fadeUp 0.5s ease both; animation-delay: 0.1s; }
+.hero h1      { animation: fadeUp 0.6s ease both; animation-delay: 0.25s; }
+.hero-sub     { animation: fadeUp 0.6s ease both; animation-delay: 0.4s; }
+.hero-actions { animation: fadeUp 0.6s ease both; animation-delay: 0.55s; }
+.hero-proof-strip { animation: fadeUp 0.6s ease both; animation-delay: 0.7s; }
+
+/* ════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .pricing-grid { grid-template-columns: 1fr 1fr; }
+  .about-layout { grid-template-columns: 1fr; }
+  .about-img-col { max-width: 320px; }
+}
+@media (max-width: 768px) {
+  .page, .page-wide { padding: 0 24px; }
+  .sec { padding: 72px 0; }
+  .sec-md { padding: 56px 0; }
+  .pain-layout,
+  .what-layout,
+  .sprint-top,
+  .scale-layout,
+  .retreat-layout,
+  .guarantee-grid,
+  .faq-layout { grid-template-columns: 1fr; gap: 36px; }
+  .timeline { grid-template-columns: 1fr; }
+  .boost-grid { grid-template-columns: 1fr; }
+  .delivery-grid { grid-template-columns: 1fr; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .rules-grid { grid-template-columns: 1fr 1fr; }
+  .hero-body { padding: 80px 0 80px 0; }
+  .hero-geo { display: none; }
+  .d1 { font-size: clamp(42px, 10vw, 72px); }
+  .hero-proof-strip { gap: 14px; }
+  .hps-sep { display: none; }
+  .funnel-block { flex-direction: column; }
+  .funnel-arrow { transform: rotate(90deg); }
+}
+@media (max-width: 480px) {
+  .rules-grid { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; align-items: flex-start; }
+  .final-actions { flex-direction: column; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="hero-atm"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-geo">
+    <div class="g-glow"></div>
+    <div class="g-ring"></div>
+    <div class="g-ring"></div>
+    <div class="g-ring"></div>
+    <div class="g-ring"></div>
+  </div>
+
+  <div class="page">
+    <div class="hero-body">
+      <div class="hero-kicker">
+        <div class="dot"></div>
+        <span>Calm Scale Lab &nbsp;·&nbsp; Now Enrolling</span>
+      </div>
+      <h1>
+        <span class="display d1 h1-pre">The Execution Container for Coaches</span>
+        <span class="display d1 italic" style="color:#d06090;">Done Trying</span>
+        <span class="display d1 accent-teal">Everything.</span>
+      </h1>
+      <p class="hero-sub">
+        You don't need more strategies.<br>
+        You need <strong>one setup that actually gets executed</strong> — a premium offer, a non-content lead system, and 90 days of structured execution to reach consistent €10–20K months.
+      </p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn btn-primary btn-lg">
+          See Enrollment Options
+          <svg viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 3l4.5 4.5L8 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#how-it-works" class="btn btn-ghost">See How It Works</a>
+      </div>
+      <div class="hero-proof-strip">
+        <div class="hps-item">
+          <svg class="hps-icon" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4v3l1.8 1.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span><strong>90-day</strong> Sprint · month 1</span>
+        </div>
+        <div class="hps-sep"></div>
+        <div class="hps-item">
+          <svg class="hps-icon" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Cancel anytime <strong>after month 3</strong></span>
+        </div>
+        <div class="hps-sep"></div>
+        <div class="hps-item">
+          <svg class="hps-icon" viewBox="0 0 14 14" fill="none"><path d="M7 1.5L2 4v4.5C2 11 4.5 13 7 13.5c2.5-.5 5-2.5 5-5V4L7 1.5z" stroke="currentColor" stroke-width="1.2"/></svg>
+          <span>From <strong>€497/mo beta</strong> or €3,997 PIF</span>
+        </div>
+        <div class="hps-sep"></div>
+        <div class="hps-item">
+          <svg class="hps-icon" viewBox="0 0 14 14" fill="none"><rect x="2" y="3" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M5 3V2m4 1V2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span>Sprint starts <strong>monthly</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TICKER ══════════════ -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ti"><strong>Anti-hustle</strong><div class="ti-dot"></div></span>
+    <span class="ti">Anti-content<div class="ti-dot"></div></span>
+    <span class="ti"><strong>Anti-reset</strong><div class="ti-dot"></div></span>
+    <span class="ti">One offer. One lead source.<div class="ti-dot"></div></span>
+    <span class="ti"><strong>90-Day Sprint</strong> to first traction<div class="ti-dot"></div></span>
+    <span class="ti">Coaches at <strong>€3–7K/month</strong><div class="ti-dot"></div></span>
+    <span class="ti">Bi-weekly calls + <strong>async support</strong><div class="ti-dot"></div></span>
+    <span class="ti"><strong>€497/mo beta</strong> · PIF €3,997<div class="ti-dot"></div></span>
+    <span class="ti">VIP Private: <strong>€7,597</strong><div class="ti-dot"></div></span>
+    <span class="ti">PIF → <strong>50% off the Retreat</strong><div class="ti-dot"></div></span>
+    <span class="ti"><strong>Anti-hustle</strong><div class="ti-dot"></div></span>
+    <span class="ti">Anti-content<div class="ti-dot"></div></span>
+    <span class="ti"><strong>Anti-reset</strong><div class="ti-dot"></div></span>
+    <span class="ti">One offer. One lead source.<div class="ti-dot"></div></span>
+    <span class="ti"><strong>90-Day Sprint</strong> to first traction<div class="ti-dot"></div></span>
+    <span class="ti">Coaches at <strong>€3–7K/month</strong><div class="ti-dot"></div></span>
+    <span class="ti">Bi-weekly calls + <strong>async support</strong><div class="ti-dot"></div></span>
+    <span class="ti"><strong>€497/mo beta</strong> · PIF €3,997<div class="ti-dot"></div></span>
+    <span class="ti">VIP Private: <strong>€7,597</strong><div class="ti-dot"></div></span>
+    <span class="ti">PIF → <strong>50% off the Retreat</strong><div class="ti-dot"></div></span>
+  </div>
+</div>
+
+<!-- ══════════════ PAIN ══════════════ -->
+<section class="pain-sec sec">
+  <div class="page">
+    <div class="pain-layout">
+
+      <div class="pain-left">
+        <div class="section-eyebrow"><span class="label label-teal">The Real Problem</span></div>
+        <h2 class="display d2">You're Not Stuck.<br><span class="italic" style="color:#d06090;">You're Overloaded.</span></h2>
+        <blockquote class="pull-q">"I'm busy, I'm good at what I do — but the way I'm getting clients right now feels unstable, noisy, and harder than it should be."</blockquote>
+        <p class="body">This is the most common sentence I hear from coaches at €3–7K/month. They're skilled. They've done the courses. They've tried the funnels, the content, the launches. And they're exhausted from resetting every 90 days.</p>
+        <p class="body" style="margin-top:16px;">The problem isn't strategy. <strong>It's that too many strategies are running at once.</strong> The answer is almost never more — it's almost always less, applied with precision.</p>
+      </div>
+
+      <div class="mirror-stack">
+        <div class="mirror-row">
+          <div class="mr-bullet"></div>
+          <div><span class="mr-head">Multiple half-built strategies</span><span class="mr-body">4–6 open loops competing for your attention — none of them getting the execution they need to actually work.</span></div>
+        </div>
+        <div class="mirror-row">
+          <div class="mr-bullet"></div>
+          <div><span class="mr-head">Income that depends on effort</span><span class="mr-body">Revenue spikes when you push hard, disappears when you stop. No system running underneath it.</span></div>
+        </div>
+        <div class="mirror-row">
+          <div class="mr-bullet"></div>
+          <div><span class="mr-head">Decision fatigue every week</span><span class="mr-body">Constantly choosing between priorities instead of executing one clear path forward.</span></div>
+        </div>
+        <div class="mirror-row">
+          <div class="mr-bullet"></div>
+          <div><span class="mr-head">Content as the only lead source</span><span class="mr-body">A lead system that stops working the moment you stop posting. That's not leverage — that's a treadmill.</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ REFRAME ══════════════ -->
+<section class="reframe">
+  <div class="page">
+    <div class="reframe-inner">
+      <div class="rf-stack">
+        <span class="rf-line">Not a motivation problem.</span>
+        <span class="rf-line">Not a content problem.</span>
+        <span class="rf-line">Not a skill problem.</span>
+        <span class="rf-line white">You need one setup that actually gets executed.</span>
+        <span class="rf-line gold">That's what Calm Scale Lab is built for.</span>
+      </div>
+      <p class="rf-foot">Anti-hustle &nbsp;·&nbsp; Anti-content &nbsp;·&nbsp; Anti-reset</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ WHAT IT IS ══════════════ -->
+<section class="sec">
+  <div class="page">
+    <div class="what-layout">
+
+      <div>
+        <div class="section-eyebrow"><span class="label label-teal">The Container</span></div>
+        <h2 class="display d2">One Decision.<br>One Funnel.<br><span class="italic" style="color:#d06090;">One Clean Setup.</span></h2>
+        <div class="core-quote-block">
+          <div class="cqb-label">The Core Promise</div>
+          <div class="cqb-quote">"You don't need more strategies or information. You need one setup that actually gets executed."</div>
+        </div>
+        <p class="body">Calm Scale Lab is not a course. Not a group programme. <strong>It's a precision execution container.</strong> You come in, strip your business to what makes money, design one premium offer, install one non-organic lead system, and build a sales rhythm you can run without burning out.</p>
+        <p class="body" style="margin-top:16px;">No funnels, no daily posting, no hustle tactics. Instead: <strong>decision clarity, clean architecture, and the structure to execute it</strong> — with AI running in the background to reduce the mental load, not add to it.</p>
+        <a href="#pricing" class="btn btn-primary" style="margin-top:28px;">
+          View Enrollment Options
+          <svg viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 3l4.5 4.5L8 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="fit-cards">
+        <div class="fit-card yes">
+          <div class="fit-head">
+            <div class="fit-head-icon">✓</div>
+            <span class="label label-teal">This is for you if</span>
+          </div>
+          <ul class="fit-list">
+            <li>You're a coach, consultant, or course creator at €3–7K/month</li>
+            <li>You're skilled but overwhelmed — too many strategies open at once</li>
+            <li>You've tried content, funnels, and launches — and you're done resetting</li>
+            <li>You want €10–20K months without the chaos and constant output</li>
+            <li>You're willing to simplify radically and execute, not just plan</li>
+          </ul>
+        </div>
+        <div class="fit-card no">
+          <div class="fit-head">
+            <div class="fit-head-icon">✕</div>
+            <span class="label" style="color:#d06090;">This is NOT for you if</span>
+          </div>
+          <ul class="fit-list">
+            <li>You're pre-revenue or brand new to coaching</li>
+            <li>You want motivation, validation, or someone to cheer you on</li>
+            <li>You're unwilling to simplify, cut offers, or have sales conversations</li>
+            <li>You want a passive course to watch instead of execute</li>
+          </ul>
+          <p class="fit-note">This filter is non-negotiable. Calm Scale Lab works because everyone inside is ready to move — not plan.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PHASE 1: SPRINT ══════════════ -->
+<section class="sprint-sec sec" id="how-it-works">
+  <div class="page">
+
+    <div class="sprint-top">
+      <div class="sprint-intro">
+        <div class="phase-chip-row">
+          <span class="chip chip-rose">Phase 01</span>
+          <span class="chip chip-dim">Required · Months 1–3</span>
+        </div>
+        <h2 class="display d2">The 90-Day<br><span class="italic" style="color:#d06090;">Execution Sprint</span></h2>
+        <p class="body" style="margin-top:18px;">Most coaches already know what to do. The problem is <strong>they've never been forced to do only one thing.</strong> The Sprint removes that problem. One offer. One lead source. No rebranding. No tweaking. Execution only.</p>
+      </div>
+      <div>
+        <p class="body">The Sprint closes every open loop and replaces them with one non-negotiable architecture: <strong>one premium offer</strong> at €1,000+, one non-organic lead source chosen with Andrea, and one sales rhythm you run until it converts.</p>
+        <p class="body" style="margin-top:16px;">By month 3, you don't have a plan. <strong>You have a system.</strong> And evidence it works.</p>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-card">
+        <div class="tl-num">Month 01</div>
+        <div class="tl-title">Decide &amp; Strip</div>
+        <div class="tl-items">
+          <div class="tl-item">Kill excess ideas and open strategies</div>
+          <div class="tl-item">Lock ONE premium offer (€1,000+)</div>
+          <div class="tl-item">Define ONE ideal buyer</div>
+          <div class="tl-item">Choose ONE lead source with Andrea</div>
+        </div>
+        <div class="tl-outcome">→ Clear offer. Clear ask. System decided and ready to install.</div>
+      </div>
+      <div class="tl-card">
+        <div class="tl-num">Month 02</div>
+        <div class="tl-title">Install the System</div>
+        <div class="tl-items">
+          <div class="tl-item">Activate your lead source</div>
+          <div class="tl-item">Deliver entry-point events or outreach</div>
+          <div class="tl-item">Run sales conversations</div>
+          <div class="tl-item">Track conversations — not vanity metrics</div>
+        </div>
+        <div class="tl-outcome">→ Active conversations in the pipeline. Real evidence of traction.</div>
+      </div>
+      <div class="tl-card">
+        <div class="tl-num">Month 03</div>
+        <div class="tl-title">Stabilize Momentum</div>
+        <div class="tl-items">
+          <div class="tl-item">Refine delivery and conversion</div>
+          <div class="tl-item">Improve close rate with clean follow-up</div>
+          <div class="tl-item">Remove remaining friction</div>
+          <div class="tl-item">Decide what stays, what gets cut</div>
+        </div>
+        <div class="tl-outcome">→ A repeatable system you can run without chaos — ready for the Lab.</div>
+      </div>
+    </div>
+
+    <!-- Architecture -->
+    <div style="margin-bottom:48px;">
+      <div class="boost-headline">The Sprint Architecture — One Path, Your Lead Source</div>
+      <div class="funnel-block">
+        <div class="funnel-step">
+          <div class="fs-box" style="border-color:rgba(96,0,64,0.28); background:rgba(96,0,64,0.08);">
+            <div class="fs-icon">🎯</div>
+            <div class="fs-label">Lead Source</div>
+            <div class="fs-sub">Collabs · outreach · referrals · ads</div>
+          </div>
+          <div class="funnel-label">You choose the one that fits</div>
+        </div>
+        <div class="funnel-arrow">→</div>
+        <div class="funnel-step">
+          <div class="fs-box" style="border-color:rgba(96,0,64,0.18); background:rgba(96,0,64,0.05);">
+            <div class="fs-icon">⚡</div>
+            <div class="fs-label">Entry-Point Event</div>
+            <div class="fs-sub">Workshop · call · audit · demo</div>
+          </div>
+          <div class="funnel-label">Value delivery + qualified interest</div>
+        </div>
+        <div class="funnel-arrow">→</div>
+        <div class="funnel-step">
+          <div class="fs-box" style="border-color:rgba(9,194,191,0.22); background:rgba(9,194,191,0.06);">
+            <div class="fs-icon">📞</div>
+            <div class="fs-label">Sales Conversation</div>
+            <div class="fs-sub">Qualified buyers only</div>
+          </div>
+          <div class="funnel-label">No content grind required</div>
+        </div>
+      </div>
+      <p class="small" style="text-align:center; max-width:520px; margin:0 auto;">The structure is fixed. The lead source is chosen with Andrea based on your situation, network, and offer.</p>
+    </div>
+
+    <!-- Rules -->
+    <div class="rules-grid">
+      <div class="rules-label">Sprint Rules — Non-Negotiable for All Members</div>
+      <div class="rule-item">One offer only — no exceptions</div>
+      <div class="rule-item">One lead source — no switching in months 1–3</div>
+      <div class="rule-item">No rebranding, tweaking, or rebuilding</div>
+      <div class="rule-item">Minimum offer price: €1,000+</div>
+      <div class="rule-item">No low-ticket distractions</div>
+      <div class="rule-item">No freebies used as avoidance</div>
+    </div>
+
+    <!-- Boost -->
+    <div class="boost-headline">Sprint Boost — Included for All Members</div>
+    <div class="boost-grid">
+      <div class="boost-card">
+        <div class="bc-top"><div class="bc-icon">🛡</div><div class="bc-title">Sprint Guardrails</div></div>
+        <div class="bc-body">Non-negotiable rules that eliminate distraction and force focused execution for 90 days.</div>
+        <span class="chip chip-rose bc-badge">Included</span>
+      </div>
+      <div class="boost-card">
+        <div class="bc-top"><div class="bc-icon">⚡</div><div class="bc-title">Weekly Execution Check-In</div></div>
+        <div class="bc-body">Short async accountability loop that keeps momentum alive and stops overthinking killing progress.</div>
+        <span class="chip chip-teal bc-badge">Async</span>
+      </div>
+      <div class="boost-card">
+        <div class="bc-top"><div class="bc-icon">🎯</div><div class="bc-title">Sprint Hot Seat Priority</div></div>
+        <div class="bc-body">Sprint members get first access to hot seats on bi-weekly calls — action over theory, every time.</div>
+        <span class="chip chip-rose bc-badge">Priority Access</span>
+      </div>
+      <div class="boost-card">
+        <div class="bc-top"><div class="bc-icon">📄</div><div class="bc-title">One-Page Funnel Blueprint</div></div>
+        <div class="bc-body">Fill-in-the-blank template that removes friction and speeds implementation. No blank-page paralysis.</div>
+        <span class="chip chip-dim bc-badge">Template</span>
+      </div>
+      <div class="boost-card">
+        <div class="bc-top"><div class="bc-icon">💬</div><div class="bc-title">Sales Conversation Cheat Sheet</div></div>
+        <div class="bc-body">Simple script that builds confidence and shortens the path from conversation to paid client.</div>
+        <span class="chip chip-dim bc-badge">Script</span>
+      </div>
+      <div class="boost-card">
+        <div class="bc-top"><div class="bc-icon">📊</div><div class="bc-title">Sprint Scorecard</div></div>
+        <div class="bc-body">Lightweight tracker that makes real progress visible and reduces the emotional noise of "is this working?"</div>
+        <span class="chip chip-dim bc-badge">Tracker</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════ PHASE 2: LAB ══════════════ -->
+<section class="sec">
+  <div class="page">
+    <div class="scale-layout">
+      <div>
+        <div class="section-eyebrow"><span class="label label-teal">Phase 02 · Month 4+</span></div>
+        <h2 class="display d2"><span class="italic accent-teal">Calm Scale</span><br>Lab</h2>
+        <p class="body" style="margin-top:20px;">After the Sprint, members don't leave because they're stuck. <strong>They stay because they're building stability.</strong> The Lab is where 90 days of execution becomes permanent leverage — where the system starts running without you pushing it every day.</p>
+        <p class="body" style="margin-top:16px;">No hustle. No noise. No more strategies layered on top of each other. The Lab runs on two locked pillars: <strong>Stabilize Income</strong> and <strong>Install Leverage</strong>.</p>
+        <div class="scale-manifesto">
+          <div class="sm-headline">"No hustle. No noise. No more strategies."</div>
+          <p class="sm-body">Clients stay not because they're stuck, but because they're building something that lasts. <strong>The Lab protects the calm you built in the Sprint</strong> while expanding the revenue underneath it.</p>
+        </div>
+      </div>
+      <div class="pillar-pair">
+        <div class="pillar p1">
+          <div class="pillar-label">Pillar One</div>
+          <div class="pillar-title">Stabilize Income</div>
+          <ul class="pillar-items">
+            <li>Predictable pipeline — no more feast and famine</li>
+            <li>Fewer emotional swings, more rational decisions</li>
+            <li>Clean, repeatable delivery that doesn't drain you</li>
+            <li>Sustainable months — not bursts followed by silence</li>
+          </ul>
+        </div>
+        <div class="pillar p2">
+          <div class="pillar-label">Pillar Two</div>
+          <div class="pillar-title">Install Leverage</div>
+          <ul class="pillar-items">
+            <li>AI as operator — prep, follow-up, SOPs running quietly</li>
+            <li>Strategic delegation of everything repeatable</li>
+            <li>Better collaborations, far less prospecting effort</li>
+            <li>Fewer decisions per week — dramatically lower mental load</li>
+          </ul>
+        </div>
+        <div style="padding:20px 22px; border-radius:var(--r); background:var(--ink-card); border:1px solid var(--rule);">
+          <p class="small" style="color:var(--chalk-dim); line-height:1.72;">Bi-weekly calls serve both Sprint and Lab members. Same 90-minute structure — different coaching lens applied to where you are. Sprint members execute. Lab members leverage. Both groups benefit from being in the room together.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ DELIVERY ══════════════ -->
+<section class="delivery-sec sec-md">
+  <div class="page">
+    <div class="section-eyebrow" style="margin-bottom:12px;"><span class="label label-teal">How We Show Up</span></div>
+    <h2 class="display d3" style="margin-bottom:40px;">Built for Execution. <span class="italic" style="color:#d06090;">Not Overwhelm.</span></h2>
+    <div class="delivery-grid">
+      <div class="d-card">
+        <div class="d-icon-wrap">
+          <svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.3"/><path d="M11 7v4l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <div class="d-title">Bi-Weekly Group Call</div>
+        <div class="d-body">90 minutes. Every time: pulse check → one principle (max 20 min) → hot seats. Sprint members get priority. No motivation speeches. You leave with one clear action.</div>
+        <div class="d-detail">90 min · Every 2 weeks · Sprint + Lab together</div>
+      </div>
+      <div class="d-card">
+        <div class="d-icon-wrap">
+          <svg viewBox="0 0 22 22" fill="none"><path d="M4 11h14M4 6.5h9M4 15.5h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <div class="d-title">Async Support Channel</div>
+        <div class="d-body">Slack or WhatsApp with structured channels. Voice notes and Loom feedback from Andrea. Office-hours style access — not unlimited on-demand that drains attention.</div>
+        <div class="d-detail">Structured async · Voice + Loom · No noise</div>
+      </div>
+      <div class="d-card">
+        <div class="d-icon-wrap">
+          <svg viewBox="0 0 22 22" fill="none"><path d="M5 11l4.5 4.5L17 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="d-title">Sprint Blueprint Call</div>
+        <div class="d-body">Every new member begins with a private onboarding call to personalize their 90-day Sprint — locking offer, lead source, and execution path. You're executing within the first 48 hours.</div>
+        <div class="d-detail">Private · 1:1 with Andrea · Sprint Map + Lead Decision</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ RETREAT ══════════════ -->
+<section class="retreat-sec sec">
+  <div class="page">
+    <div class="retreat-layout">
+      <div class="retreat-visual">
+        <div class="rv-bg"></div>
+        <div class="rv-grid"></div>
+        <div class="rv-content">
+          <span class="chip chip-gold" style="margin-bottom:22px;">Phase 03 · Optional · Q3 2026</span>
+          <div class="rv-title">The Strategic Expansion Retreat</div>
+          <p class="rv-promise">
+            You leave knowing exactly how your business expands next — without undoing the calm, stability, and leverage you've already built.
+            <br><br>
+            <em>You stop chasing growth. You start directing it.</em>
+          </p>
+          <div class="rv-stats">
+            <div class="rv-stat"><strong>3–5</strong><span>Days in-person</span></div>
+            <div class="rv-stat"><strong>Max 8</strong><span>Members</span></div>
+            <div class="rv-stat"><strong>50% off</strong><span>PIF members</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="retreat-copy">
+        <div class="section-eyebrow"><span class="label label-gold">Phase 03 · Optional</span></div>
+        <h2 class="display d2">For Members <span class="italic accent-gold">Ready to Expand.</span></h2>
+        <p class="body" style="margin-top:20px; margin-bottom:26px;">The Retreat is not a motivation event. It's a precision expansion session for Lab members who've built stability and are ready to direct the next level of growth — without undoing the calm.</p>
+        <div class="outcomes">
+          <div class="outcome-item">
+            <div class="oi-num">1</div>
+            <div class="oi-text"><strong>One intentional expansion path</strong> — chosen deliberately, not reacted to. You leave with a decision, not a list of options.</div>
+          </div>
+          <div class="outcome-item">
+            <div class="oi-num">2</div>
+            <div class="oi-text"><strong>12–18 month expansion map</strong> — that protects your capacity and nervous system regulation, not just your revenue.</div>
+          </div>
+          <div class="outcome-item">
+            <div class="oi-num">3</div>
+            <div class="oi-text"><strong>Leadership identity shift</strong> — from operator to strategic owner. The way you see the business changes permanently.</div>
+          </div>
+        </div>
+        <div style="padding:18px 20px; border-radius:var(--r); border:1px solid rgba(232,201,110,0.2); background:rgba(232,201,110,0.04);">
+          <p class="small" style="color:var(--chalk-dim);">Available to Calm Scale Lab members only. Commit to 12 months (PIF) and receive <strong style="color:var(--gold);">50% off the Retreat price</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TESTIMONIALS ══════════════ -->
+<section class="testi-sec sec-md">
+  <div class="page">
+    <div class="section-eyebrow"><span class="label label-teal">Client Results</span></div>
+    <h2 class="display d3">What Clients <span class="italic" style="color:#d06090;">Say</span></h2>
+    <div class="testi-grid">
+
+      <div class="testi-card">
+        <div class="tc-result">Coaching · Wellness</div>
+        <p class="tc-quote">"Andrea offers the best combination of qualities to work with: extremely organized and efficient, yet with great flexibility in addressing her clients' individual needs. I consider her a friend, a colleague, and a highly qualified coach."</p>
+        <div class="tc-author">
+          <div class="tc-av">D</div>
+          <div>
+            <div class="tc-name">Diane L.</div>
+            <div class="tc-role">Wellness Coach</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="tc-result">Business Coaching</div>
+        <p class="tc-quote">"She does not let you get away with less than your best — and she sees your best. Her frameworks cut through fluff and drive you straight toward impact. A real advocate of women stepping into their independence."</p>
+        <div class="tc-author">
+          <div class="tc-av">S</div>
+          <div>
+            <div class="tc-name">Sarah</div>
+            <div class="tc-role">Business Coach</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="tc-result">Transformational Results</div>
+        <p class="tc-quote">"Working with Andrea and her team has been transformational. Her approach is comprehensive and her team is extremely responsive. They care about the clients and work tirelessly. And it works — I can't say enough positive things."</p>
+        <div class="tc-author">
+          <div class="tc-av">D</div>
+          <div>
+            <div class="tc-name">Donna M.</div>
+            <div class="tc-role">Client</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ ABOUT ANDREA ══════════════ -->
+<section class="sec">
+  <div class="page">
+    <div class="about-layout">
+      <div class="about-img-col">
+        <div class="about-frame">
+          <img src="https://d1yei2z3i6k35z.cloudfront.net/7392034/67eba6142c853_AndreaCaprioProfilePic.png" alt="Andrea Caprio" onerror="this.style.display='none'">
+        </div>
+        <div class="about-badge">
+          <span class="ab-num">90</span>
+          <span class="ab-label">day sprint</span>
+        </div>
+      </div>
+      <div class="about-copy">
+        <div class="section-eyebrow"><span class="label label-teal">Your Guide</span></div>
+        <h2 class="display d2">Andrea <span class="italic" style="color:#d06090;">Caprio</span></h2>
+
+        <p class="body">I'm the founder of Wellness Methods and the architect behind Calm Scale Lab. I scaled my own emotional eating and weight loss coaching practice to six figures — and I did it by stripping everything down to what actually worked, not by adding more.</p>
+        <p class="body" style="margin-top:16px;">I now mentor coaches using the same proven marketing and collaboration strategies behind that growth. My approach isn't about motivation or mindset. <strong>It's about finding the one structural lever in your business that unlocks everything else — and applying it with precision so the results compound, not collapse.</strong></p>
+        <p class="body" style="margin-top:16px;">I stay in the room until it's installed.</p>
+        <div style="display:flex; gap:14px; margin-top:28px; flex-wrap:wrap;">
+          <a href="#pricing" class="btn btn-primary">
+            View Enrollment Options
+            <svg viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 3l4.5 4.5L8 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="https://web.wellnessmethods.com/cslbooking" class="btn btn-ghost">Book a Structure Session First</a>
+        </div>
+        <p class="cta-note" style="margin-top:12px;"><strong>Rolling enrollment</strong> · Sprint starts monthly · 3-month minimum</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PRICING ══════════════ -->
+<section class="pricing-sec sec" id="pricing">
+  <div class="page">
+    <div class="section-eyebrow"><span class="label label-teal">Enrollment</span></div>
+    <h2 class="display d2" style="margin-bottom:12px;">Three Paths. <span class="italic accent-teal">One Direction.</span></h2>
+    <p class="body" style="max-width:600px; margin-bottom:0;">All three begin with the same 90-day Sprint. Choose monthly beta entry, a pay-in-full year, or VIP private access.</p>
+
+    <!-- Beta urgency banner -->
+    <div style="margin-top:28px; padding:16px 22px; border-radius:var(--r); background:rgba(232,201,110,0.08); border:1px solid rgba(232,201,110,0.25); display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+      <span style="font-size:18px;">⚡</span>
+      <div>
+        <span style="font-size:14px; font-weight:600; color:var(--gold);">Beta pricing closes when the first cohort fills.</span>
+        <span style="font-size:14px; color:var(--chalk-mid); font-weight:400;"> Once full, the monthly rate goes to €1,000/mo standard. This is the lowest this program will ever be priced.</span>
+      </div>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- ① BETA MONTHLY -->
+      <div class="price-card beta-card">
+        <span class="chip chip-gold">⚡ Beta — Limited Spots</span>
+        <div class="pc-name">Sprint + Lab</div>
+        <div class="pc-tagline">Founding member rate. Ends when the cohort fills. Full access from day one.</div>
+        <div class="pc-price">€497</div>
+        <div class="pc-period">/month · 3-month minimum</div>
+        <div class="pc-note">Then €397/month from month 4 · Save €503/mo vs standard</div>
+        <div class="pc-rule"></div>
+        <div class="pc-includes">
+          <div class="pci">90-Day Execution Sprint (required)</div>
+          <div class="pci">All 6 Sprint Boost resources</div>
+          <div class="pci">Bi-weekly group calls (90 min)</div>
+          <div class="pci">Async support channel</div>
+          <div class="pci">Sprint Blueprint Call with Andrea</div>
+          <div class="pci">Calm Scale Lab access from month 4</div>
+        </div>
+        <a href="https://web.wellnessmethods.com/5483f23e-73bf0da1" class="btn btn-ghost pc-btn">Join at Beta Price</a>
+      </div>
+
+      <!-- ② PIF 12-MONTH — FEATURED -->
+      <div class="price-card pif-card">
+        <span class="chip chip-gold">★ Best Value · Pay in Full</span>
+        <div class="pc-name">12-Month<br>Full Access</div>
+        <div class="pc-tagline">Pay once. Lock your place for a year. Retreat discount included.</div>
+        <div class="pc-price-was">€12,000</div>
+        <div class="pc-price" style="font-size:42px; color:var(--gold);">€3,997</div>
+        <div class="pc-period">one payment · full 12 months</div>
+        <div class="pc-note gold-note">~€333/mo equivalent · Save €8,003 vs standard · 50% off Retreat</div>
+        <div class="pc-rule"></div>
+        <div class="pc-includes">
+          <div class="pci">Full 90-Day Sprint + all Boost resources</div>
+          <div class="pci">12 months Calm Scale Lab access</div>
+          <div class="pci">All calls, async support, onboarding</div>
+          <div class="pci">Sprint Office Hour + priority hot seats</div>
+          <div class="pci">Direct async access to Andrea</div>
+          <div class="pci gold-pci" style="color:var(--gold);">50% off the Strategic Expansion Retreat</div>
+        </div>
+        <a href="https://web.wellnessmethods.com/5483f23e" class="btn btn-gold pc-btn">
+          Pay in Full &amp; Save
+          <svg viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 3l4.5 4.5L8 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- ③ VIP PRIVATE -->
+      <div class="price-card vip-card">
+        <span class="chip chip-teal">◆ VIP · Private Access</span>
+        <div class="pc-name">VIP<br>Private Access</div>
+        <div class="pc-tagline">Everything in 12-Month Full Access — plus a direct, focused line to Andrea each month.</div>
+        <div class="pc-price-was">€12,000+</div>
+        <div class="pc-price" style="font-size:38px; color:var(--teal);">€7,597</div>
+        <div class="pc-period">one payment · full 12 months</div>
+        <div class="pc-note">Save €4,403 vs standard · ~€633/mo equivalent · 3 places only</div>
+        <div class="pc-rule"></div>
+
+        <div class="wire-block">
+          <div class="wire-block-label">Monthly Private Strategy Wire</div>
+          <div class="wire-block-desc">A focused <strong>15-minute direct line to Andrea</strong> each month — to unblock one decision, pressure-test one move, or make one call with clarity.</div>
+        </div>
+
+        <div class="pc-includes">
+          <div class="pci">Everything in 12-Month Full Access</div>
+          <div class="pci">50% off the Strategic Expansion Retreat</div>
+          <div class="pci">Monthly private strategy wire (15 min)</div>
+          <div class="pci">Priority Sprint Blueprint Call before month 1</div>
+          <div class="pci">Private async thread — decisions that can't wait</div>
+        </div>
+        <a href="https://web.wellnessmethods.com/5483f23e-dc1773ac" class="btn btn-primary pc-btn">
+          Enroll — VIP Access
+          <svg viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 3l4.5 4.5L8 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <p class="cta-note" style="text-align:center; margin-top:10px;">3 places only · Not always available</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════ GUARANTEE ══════════════ -->
+<section class="guarantee-sec sec-md">
+  <div class="page">
+    <div class="guarantee-wrap">
+
+      <div class="guarantee-icon-wrap">
+        <svg viewBox="0 0 30 30" fill="none">
+          <path d="M15 2L3.5 7v9C3.5 22.5 8.5 27.5 15 29c6.5-1.5 11.5-6.5 11.5-13V7L15 2z" stroke="#09c2bf" stroke-width="1.4" stroke-linejoin="round"/>
+          <path d="M9.5 15l4 4 7.5-7.5" stroke="#09c2bf" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <h2 class="guarantee-headline">We Promise <em>Traction.</em><br>Not Luck.</h2>
+
+      <p class="guarantee-intro">
+        This is not a motivation programme. It's an execution container — and execution produces verifiable results.
+        <strong>Follow the Sprint framework and you will have active sales conversations and a working system by month 3.</strong>
+      </p>
+
+      <div class="guarantee-grid">
+        <div class="guarantee-card card-teal">
+          <div class="gc-label">If month 1 isn't right</div>
+          <div class="gc-condition">Full refund. No questions asked.</div>
+          <div class="gc-outcome">Complete your Sprint Blueprint Call, access your onboarding, and decide within 30 days that this isn't the right container — <strong>you get every cent back</strong>. No friction, no hard feelings.</div>
+        </div>
+        <div class="guarantee-card card-rose">
+          <div class="gc-label">If you do the Sprint and don't have traction by month 3</div>
+          <div class="gc-condition">We rebuild your blueprint together — at no charge.</div>
+          <div class="gc-outcome">Follow the framework — one offer, one lead source, one rhythm — and don't have active conversations by month 3: <strong>Andrea rebuilds your Sprint blueprint in a private session</strong>. No charge, no expiry.</div>
+        </div>
+      </div>
+
+      <div class="guarantee-fine">
+        <p><strong>What "following the framework" means:</strong> one offer active, one lead source decided and running, outreach attempted in months 2–3. The guarantee applies to members who execute, not observe.</p>
+        <p><strong>Applies to all plans.</strong> The month-1 refund is available on Beta and PIF equally. The month-3 blueprint session applies to any member who has completed the Sprint actively. PIF members retain full remaining access regardless.</p>
+        <p><strong>What we don't promise:</strong> specific income figures. What we do promise — and back — is a working system with live conversations by month 3.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FAQ ══════════════ -->
+<section class="sec-md">
+  <div class="page">
+    <div class="section-eyebrow"><span class="label label-teal">Questions</span></div>
+    <h2 class="display d3" style="margin-bottom:0;">Before You Decide</h2>
+    <div class="faq-layout">
+
+      <div class="faq-item">
+        <div class="fq">What exactly happens in the first 90 days?</div>
+        <div class="fa">You begin with a private Sprint Blueprint Call with Andrea to personalize your path. Then: strip to one premium offer, choose one lead source, and install the architecture — Lead Source → Entry Event → Sales Conversation. By month 3 you have a <strong>working system</strong>, not a plan.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="fq">Can I keep my current offers?</div>
+        <div class="fa">Sprint rules require one offer only. If your current offer is priced at €1,000+ and is premium-positioned, you keep it. Multiple offers get paused for 90 days — <strong>no exceptions</strong>. This is the rule that makes the Sprint work.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="fq">Is this a group programme or 1:1?</div>
+        <div class="fa">Primarily group — bi-weekly calls, async support, hot seats. All members begin with a private Sprint Blueprint Call. PIF and VIP members also have ongoing direct async access to Andrea. Group container with 1:1 precision applied inside it.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="fq">What if I don't get results in 90 days?</div>
+        <div class="fa"><strong>We promise traction, not income guarantees.</strong> Follow the Sprint framework and you will have active conversations by month 3. If you don't, Andrea rebuilds your blueprint with you in a private session at no charge. See the guarantee section above for full details.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="fq">Can I cancel after month 3?</div>
+        <div class="fa">Yes — on the monthly plan, you can cancel with 30 days' notice after month 3. Most members stay because the Lab continues building on the Sprint. No lock-in beyond the initial 3-month commitment. PIF members have full 12-month access with no ongoing charge.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="fq">What's the difference between Beta, PIF, and VIP?</div>
+        <div class="fa">Beta (€497/mo) is the monthly entry — full access, founding rate, cancel after month 3. PIF (€3,997) is one payment for 12 months — saves €8,403 vs standard, includes the Retreat 50% discount, and removes the monthly decision. VIP (€7,597) adds a monthly 15-minute private strategy wire direct to Andrea and a priority Blueprint Call. <strong>All three begin with the same Sprint.</strong></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="fq">What does the Sprint Blueprint Call involve?</div>
+        <div class="fa">It's a private onboarding session with Andrea — not a generic call. You leave with your specific offer locked, lead source chosen, and first 30 days mapped. No generic advice. No waiting to get started. You're executing within 48 hours.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="fq">I'm already above €7K/month. Is this relevant?</div>
+        <div class="fa">The Sprint is designed for €3–7K. If you're above that, the <strong>Private Structure Session</strong> is the better starting point — a 45-minute diagnostic that identifies your specific constraint before recommending any programme. <a href="https://web.wellnessmethods.com/cslbooking">Book one here.</a></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FINAL CTA ══════════════ -->
+<section class="final">
+  <div class="final-atm"></div>
+  <div class="final-grid-overlay"></div>
+  <div class="final-inner">
+    <div class="final-kicker">
+      <div class="dot"></div>
+      <span>The next Sprint starts soon</span>
+    </div>
+    <h2 class="display d2 final-h2">Done Trying Everything.<br><span class="italic" style="color:#d06090;">Ready to Execute</span> One Thing?</h2>
+    <p class="final-sub">One offer. One funnel. 90 days of structured execution — no distractions, no resets, <strong>no more strategies you don't need.</strong></p>
+    <div class="final-actions">
+      <a href="#pricing" class="btn btn-primary btn-lg">
+        View Enrollment Options
+        <svg viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 3l4.5 4.5L8 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://web.wellnessmethods.com/cslbooking" class="btn btn-ghost">Book a Structure Session First</a>
+    </div>
+    <p class="cta-note" style="text-align:center; margin-top:18px;"><strong>Rolling enrollment · Sprint starts monthly · 3-month minimum</strong></p>
+    <p class="final-sign">If this page landed for you, you're the person I built this for.<br>— Andrea</p>
+  </div>
+</section>
+
+<footer>
+  <div class="page">
+    <p>Copyright Wellness Methods LLC. All Rights Reserved. &nbsp;·&nbsp; <a href="http://www.wellnessmethods.com">wellnessmethods.com</a> &nbsp;·&nbsp; <a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms &amp; Conditions</a></p>
+    <p style="margin-top:5px; font-size:11px;">This content is for educational purposes only and is not medical, legal, or financial advice. Wellness Methods, Andrea Caprio, its officers and affiliates urge you to make your own decisions in consultati
