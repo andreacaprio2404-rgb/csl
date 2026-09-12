@@ -9,6 +9,11 @@ Two ways in: Andrea says "EOD" or "run EOD" (manual, run immediately regardless 
 calendar state), or a scheduled check (see Trigger detection) finds her last call of
 the day has ended (automatic). Both run the identical pipeline below.
 
+If Andrea names a specific date ("run EOD for 9/14/26", "check 9/14/26 for testing"),
+treat that date as "today" everywhere below (calendar query window, Notion date match,
+Sales/Commission/Tracking date match). Say plainly in the output that this is a test
+run for that date, not a live EOD, and still draft (never send) the Slack report.
+
 ## Known IDs, do not re-discover these each run
 
 * Notion RZ Leads DB data source: `collection://3970f522-58de-801b-ba64-000b1c5ac76d`
