@@ -1,0 +1,11 @@
+[build]
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/webhooks/fathom"
+  to = "/.netlify/functions/fathom-webhook-background"
+  status = 200
+  force = true

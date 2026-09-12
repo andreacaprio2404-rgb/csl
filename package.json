@@ -1,0 +1,13 @@
+{
+  "name": "slay-post-call-pipeline",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fathom webhook to Notion and GHL automated post call pipeline for Rebecca Zung's SLAY team",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18.14.0"
+  },
+  "scripts": {
+    "dev": "netlify dev"
+  }
+}
