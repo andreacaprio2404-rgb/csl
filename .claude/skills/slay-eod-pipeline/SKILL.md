@@ -45,7 +45,12 @@ run for that date, not a live EOD, and still draft (never send) the Slack report
 
 1. Call GHL `get-calendar-events` with `userId=xsy6Wq6moVVWolyrY1IB` and no
    `calendarId`, `startTime`/`endTime` spanning today in Europe/Rome (Andrea's
-   timezone). This returns events across all her calendars in one call.
+   timezone). This returns events across all her calendars in one call. Confirmed by
+   testing: this endpoint's `startTime`/`endTime` bounds are not reliable when
+   `calendarId` is omitted, it can return events from adjacent days outside the
+   requested window. Never trust the window alone, always also filter client side:
+   parse each event's own `startTime`, convert to Europe/Rome, and keep only events
+   whose calendar date equals the target date. Do this filter before step 2.
 2. Drop events whose `calendarId` matches the Leverage Audit exclusion list above.
 3. Drop events with `appointmentStatus = cancelled`.
 4. If no events remain, there were no SLAY calls today, do nothing (no report, no
