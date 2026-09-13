@@ -43,6 +43,10 @@ run for that date, not a live EOD, and still draft (never send) the Slack report
 
 ## Trigger detection (automatic mode only, skip for manual "EOD")
 
+The scheduled Routine driving this only fires hourly on weekdays, 12:00 to 20:00 UTC
+(2pm to 10pm CEST), and never on weekends. That schedule is the actual on/off switch,
+not a filter Claude needs to reapply itself.
+
 1. Call GHL `get-calendar-events` with `userId=xsy6Wq6moVVWolyrY1IB` and no
    `calendarId`, `startTime`/`endTime` spanning today in Europe/Rome (Andrea's
    timezone). This returns events across all her calendars in one call. Confirmed by
