@@ -21,9 +21,13 @@ run for that date, not a live EOD, and still draft (never send) the Slack report
 * GHL userId for Andrea Caprio: `xsy6Wq6moVVWolyrY1IB` (confirm with `get-user` only if a
   call fails on identity, not on every run)
 * GHL calendars to exclude (Firm Leverage Audit / professional track, matched by calendar
-  name containing "Leverage Audit"): `OoJxXLrVsTQbcQYnfSgt` (Case Leverage Audit with
-  Andrea) and any sibling "Case Leverage Audit..." calendar that ever shows up assigned to
-  her. Everything else assigned to her counts as a SLAY call.
+  name containing "Leverage Audit" or "Case Command Leverage Strategist"):
+  `OoJxXLrVsTQbcQYnfSgt` (Case Leverage Audit with Andrea) and `AdGOCNa4cT9vhT0u1LeK`
+  ("(Book with us) Consultation With a Case Command Leverage Strategist", a round robin
+  audit calendar shared with another team member, first seen 9/17/26), plus any further
+  sibling audit calendar that shows up assigned to her. When an unrecognized calendarId
+  appears, check its name via `get-calendars` before counting it, rather than assuming it
+  is a SLAY calendar. Everything confirmed non-audit counts as a SLAY call.
 * TSC RZ Master spreadsheet (Google Sheets): file id
   `1d1L7iBqdj0R66sIGsU3jpo54-pYrJRzwaDQgk8C_SM0`. Contains, among other tabs: Sales,
   Commission, and Tracking. There is no reliable API to list literal tab titles through
