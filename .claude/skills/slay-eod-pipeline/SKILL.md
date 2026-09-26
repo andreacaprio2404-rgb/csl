@@ -129,3 +129,8 @@ posted or sent.
 
 No dash characters anywhere, no hyphens, no em dashes, use commas, colons, bullets, or
 numbers instead.
+
+In Report B, wrap each prospect email in backticks (e.g. `` `name@example.com` ``)
+rather than leaving it as bare text. Slack auto links a bare email as a mailto
+link and unfurls it with a "Mail to:" preview line, which Andrea does not want
+in the draft.
